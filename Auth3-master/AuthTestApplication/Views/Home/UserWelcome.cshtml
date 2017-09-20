@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "User welcome";
+}
+<h2>@ViewBag.Title</h2>
+Type text to encrypt:<br/>
+<input type="text" class="tbText"/>
+<input type="button" value="Encrypt!" class="btnSend"/><br/><br/>
+
+<b>Encrypted:</b>
+<div id="encrypted"> not calculated yet</div><br/>
+<b>Decrypted:</b>
+<div id="decrypted"> not calculated yet</div><br />
+
+@section MyScripts {
+    <script type="text/javascript">
+        $(function () {
+            $(".btnSend").click(function () {
+                var text = $('.tbText').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/GenerateKey",
+                    data: '{text: "' + text + '" }',
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        $('#encrypted').text(data.encrypted);
+                        $('#decrypted').text(data.decrypted);
+                    },
+                    error: function () {
+                        $('#encrypted').text('calculation error');
+                        $('#decrypted').text('calculation error');
+                    }
+                });
+            });
+        });
+    </script>
+}

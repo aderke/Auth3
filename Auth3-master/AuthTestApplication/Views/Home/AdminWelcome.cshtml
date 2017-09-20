@@ -1,0 +1,40 @@
+﻿@using AuthTestApplication.Models
+@model List<AuthTestApplication.Managers.UserElement>
+
+@{
+    ViewBag.Title = "Admin welcome";
+}
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <h4>Logout users:</h4>
+    @foreach (var user in Model)
+    {
+        if (user.Role != ApplicationRole.Admin.ToString())
+        {
+            <input class="logoff" type="button" value="@user.Name" data-val-username="@user.Name"/><br/>
+        }
+    }
+</div>
+@section MyScripts {
+    <script type="text/javascript">
+        $(function () {
+            $(".logoff").click(function () {
+                var username = $(this).data('val-username');
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Account/UserLogoff",
+                    data: '{username: "' + username + '" }',
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(data) {
+                    },
+                    error: function() {
+                    }
+                });
+            });
+        });
+</script>
+}
+
